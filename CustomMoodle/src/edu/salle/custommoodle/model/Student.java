@@ -5,11 +5,13 @@
  */
 package edu.salle.custommoodle.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author luisd
  */
-public class Student {
+public class Student{
     private String name;
     private String lastName;
     private String id;
@@ -54,5 +56,30 @@ public class Student {
     {
         return String.format("id= %s,\nname= %s,\nlastName= %s", id, name, lastName);
     }
+    
+        //retorna 1 si la cadena 1 es mayor que la 2
+        // 0 las cadenas son iguales
+        // -1 si la cadena 1 es menor 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
     
 }

@@ -13,9 +13,15 @@ import java.util.List;
  * @author luisd
  */
 public interface StudentDAO {
-    public Student save(Student studexxnt);
+    public Student save(Student student);
     
     public List<Student> findAll();
     
     public Student find(String id);
+    
+    public Student findByLastName(String lastName);
+    
+    public void delete(Student student);
+    
+    public void update(Student student);
 }

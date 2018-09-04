@@ -34,6 +34,18 @@ public class App {
 //            System.out.println("");
 //        }
 //        
+//        studentBLO.delete(s3);
+//        System.out.println(studentBLO.findAll().size());
+//        
+//        Student s = new Student("Alex", "Acosta");
+//        s.setId(1);
+//        
+//        for(Student student : studentList)
+//        {
+//            System.out.println(student);
+//            System.out.println("");
+//        }
+//        
 //        
         StudentWindow window = new StudentWindow();
         window.setVisible(true);

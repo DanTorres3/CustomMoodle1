@@ -27,6 +27,7 @@ public class StudentWindow extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         studentBLO.load();
+        refreshTable(studentBLO.findAll());
     }
 
     /**
@@ -71,11 +72,13 @@ public class StudentWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Name:");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Last name:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
         getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 140, -1));
         getContentPane().add(tfLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 140, -1));
 
@@ -95,14 +98,20 @@ public class StudentWindow extends javax.swing.JFrame {
         });
         getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("ID:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
         getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 110, -1));
 
         bUpdate.setText("Update");
         getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, -1, -1));
 
         bDelete.setText("Delete");
+        bDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteActionPerformed(evt);
+            }
+        });
         getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, -1, -1));
 
         tStudents.setModel(new javax.swing.table.DefaultTableModel(
@@ -139,10 +148,13 @@ public class StudentWindow extends javax.swing.JFrame {
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
         String name = tfName.getText();
         String lastName = tfLastName.getText();
-        Student student = new Student(name, lastName);
-        studentBLO.save(student);
-        tfName.setText("");
-        tfLastName.setText("");
+        if(!name.isEmpty() || !lastName.isEmpty())
+        {
+            Student student = new Student(name, lastName);
+            studentBLO.save(student);
+            tfName.setText("");
+            tfLastName.setText("");
+        }
     }//GEN-LAST:event_bSaveActionPerformed
 
     private void bSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchActionPerformed
@@ -201,6 +213,10 @@ public class StudentWindow extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_bExitActionPerformed
 
+    private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
+        String id = tfId.getText();
+        studentBLO.delete(studentBLO.find(id));
+    }//GEN-LAST:event_bDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDelete;

@@ -49,9 +49,9 @@ public class StudentBLO {
         studentDAO.delete(student);
     }
     
-    public void update(Student student)
+    public void update(Student student, String CURP)
     {
-        studentDAO.update(student);
+        studentDAO.update(student, CURP);
     }
     
     public void load()

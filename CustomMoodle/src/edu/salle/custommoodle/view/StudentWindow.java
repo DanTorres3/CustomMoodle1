@@ -5,11 +5,19 @@
  */
 package edu.salle.custommoodle.view;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import edu.salle.custommoodle.businesslogic.StudentBLO;
+import edu.salle.custommoodle.model.Materia;
+import edu.salle.custommoodle.model.Relacion;
 import edu.salle.custommoodle.model.Student;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,14 +30,36 @@ public class StudentWindow extends javax.swing.JFrame {
      */
     
     private StudentBLO studentBLO = new StudentBLO();
+    private List<Materia> LM = new ArrayList<>();
+    private List<Relacion> LR = new ArrayList<>();
     
     public StudentWindow() {
         initComponents();
+        this.setTitle("Alumnos");
         setLocationRelativeTo(null);
+        fillCbx();
         studentBLO.load();
         refreshTable(studentBLO.findAll());
+        loadMaterias ();
     }
 
+    public void loadMaterias ()
+    {
+        try
+        {
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new FileReader("materia.json"));
+            LM = gson.fromJson(br, new TypeToken<List<Materia>>(){}.getType());
+            if(LM==null)
+            {
+                LM = new ArrayList<>();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +74,7 @@ public class StudentWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         tfName = new javax.swing.JTextField();
-        tfLastName = new javax.swing.JTextField();
+        tfFirst = new javax.swing.JTextField();
         bSave = new javax.swing.JButton();
         bSearch = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -55,6 +85,26 @@ public class StudentWindow extends javax.swing.JFrame {
         tStudents = new javax.swing.JTable();
         bRefresh = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        cbEstados = new javax.swing.JComboBox<>();
+        rbHombre = new javax.swing.JRadioButton();
+        rbMujer = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cbAño = new javax.swing.JComboBox<>();
+        cbMes = new javax.swing.JComboBox<>();
+        cbDia = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        tfSecond = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tMateria = new javax.swing.JTable();
+        cbMateria = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        tfID = new javax.swing.JTextField();
+        bRegister = new javax.swing.JButton();
+        Refresh = new javax.swing.JButton();
+        bDrop = new javax.swing.JButton();
+        bRegresar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -74,13 +124,13 @@ public class StudentWindow extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Name:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Last name:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
-        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 140, -1));
-        getContentPane().add(tfLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 140, -1));
+        jLabel2.setText("First last name:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 140, -1));
+        getContentPane().add(tfFirst, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 140, -1));
 
         bSave.setText("Save");
         bSave.addActionListener(new java.awt.event.ActionListener() {
@@ -88,7 +138,7 @@ public class StudentWindow extends javax.swing.JFrame {
                 bSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
+        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, -1, -1));
 
         bSearch.setText("Search");
         bSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -96,15 +146,20 @@ public class StudentWindow extends javax.swing.JFrame {
                 bSearchActionPerformed(evt);
             }
         });
-        getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, -1, -1));
+        getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("ID:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
-        getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 110, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, -1, 20));
+        getContentPane().add(tfId, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 110, -1));
 
         bUpdate.setText("Update");
-        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, -1, -1));
+        bUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
 
         bDelete.setText("Delete");
         bDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -112,19 +167,19 @@ public class StudentWindow extends javax.swing.JFrame {
                 bDeleteActionPerformed(evt);
             }
         });
-        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, -1, -1));
+        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, -1));
 
         tStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id", "Name", "LastName"
+                "Id", "Name", "LastName", "Estado", "Fecha", "Sexo"
             }
         ));
         jScrollPane2.setViewportView(tStudents);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 460, 110));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 460, 110));
 
         bRefresh.setText("Refresh");
         bRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +187,7 @@ public class StudentWindow extends javax.swing.JFrame {
                 bRefreshActionPerformed(evt);
             }
         });
-        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 130, -1, -1));
+        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, -1, -1));
 
         bExit.setText("Exit");
         bExit.addActionListener(new java.awt.event.ActionListener() {
@@ -140,21 +195,392 @@ public class StudentWindow extends javax.swing.JFrame {
                 bExitActionPerformed(evt);
             }
         });
-        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 340, -1, -1));
+        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 500, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("Estado:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, -1, -1));
+
+        cbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estado" }));
+        getContentPane().add(cbEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, -1, -1));
+
+        rbHombre.setText("Hombre");
+        rbHombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbHombreActionPerformed(evt);
+            }
+        });
+        getContentPane().add(rbHombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, -1, -1));
+
+        rbMujer.setText("Mujer");
+        rbMujer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbMujerActionPerformed(evt);
+            }
+        });
+        getContentPane().add(rbMujer, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Sexo:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("Fecha de nacimiento:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
+
+        cbAño.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Año" }));
+        getContentPane().add(cbAño, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
+
+        cbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mes", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        getContentPane().add(cbMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, -1, -1));
+
+        cbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Día", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        getContentPane().add(cbDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel7.setText("Second last name:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, -1, -1));
+        getContentPane().add(tfSecond, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 140, -1));
+
+        tMateria.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Nombre", "Materia", "Docente"
+            }
+        ));
+        jScrollPane3.setViewportView(tMateria);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 420, 100));
+
+        cbMateria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Materia", "Matemáticas", "Computación", "Inglés" }));
+        getContentPane().add(cbMateria, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 430, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setText("ID");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 390, -1, -1));
+        getContentPane().add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 100, -1));
+
+        bRegister.setText("Register");
+        bRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bRegisterActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 500, -1, -1));
+
+        Refresh.setText("Refresh");
+        Refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 500, -1, -1));
+
+        bDrop.setText("Drop out");
+        bDrop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDropActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bDrop, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 500, -1, -1));
+
+        bRegresar.setText("Regresar");
+        bRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bRegresarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void fillCbx(){
+        for (int i = 2018; i >= 1900; i--) {
+            this.cbAño.addItem(Integer.toString(i));
+        }
+       
+        
+        this.cbEstados.addItem("Aguascalientes");
+        this.cbEstados.addItem("Baja California");
+        this.cbEstados.addItem("Baja california Sur");
+        this.cbEstados.addItem("Campeche");
+        this.cbEstados.addItem("Chiapas");
+        this.cbEstados.addItem("Chihuahua");
+        this.cbEstados.addItem("Coahuila");
+        this.cbEstados.addItem("Colima");
+        this.cbEstados.addItem("Ciudad de México");
+        this.cbEstados.addItem("Durango");
+        this.cbEstados.addItem("Guanajuato");
+        this.cbEstados.addItem("Guerrero");
+        this.cbEstados.addItem("Hidalgo");
+        this.cbEstados.addItem("Jalisco");
+        this.cbEstados.addItem("Edo. de México");
+        this.cbEstados.addItem("Michoacán");
+        this.cbEstados.addItem("Morelos");
+        this.cbEstados.addItem("Nayarit");
+        this.cbEstados.addItem("Nuevo León");
+        this.cbEstados.addItem("Oaxaca");
+        this.cbEstados.addItem("Puebla");
+        this.cbEstados.addItem("Querétaro");
+        this.cbEstados.addItem("Quintana Roo");
+        this.cbEstados.addItem("San Luis Potosí");
+        this.cbEstados.addItem("Sinaloa");
+        this.cbEstados.addItem("Sonora");
+        this.cbEstados.addItem("Tabasco");
+        this.cbEstados.addItem("Tamaulipas");
+        this.cbEstados.addItem("Tlaxcala");
+        this.cbEstados.addItem("Veracruz");
+        this.cbEstados.addItem("Yucatán");
+        this.cbEstados.addItem("Zacatecas");
+    }
+    
+    public String Curpize(){
+
+        String ApellidoPaterno = tfFirst.getText();
+        char ApellidoPaterno1 = DeleteConsonants(ApellidoPaterno.substring(1,ApellidoPaterno.length()));
+        ApellidoPaterno = ApellidoPaterno.substring(0,1);
+        
+        String ApellidoMaterno = tfSecond.getText();
+        ApellidoMaterno = (ApellidoMaterno.substring(0,1));
+        
+        String Nombre = tfName.getText().toUpperCase();
+        
+        Nombre = Nombre.replaceAll("JOSE", "");
+        Nombre = Nombre.replaceAll("JOSÉ", "");
+        Nombre = Nombre.replaceAll("MARIA", "");
+        Nombre = Nombre.replaceAll("MARÍA", "");
+        Nombre = Nombre.replaceAll("DE", "");
+        Nombre = Nombre.replaceAll("LOS", "");
+        Nombre = Nombre.replaceAll("LA", "");
+        Nombre = Nombre.replaceAll("MA", "");
+        Nombre = Nombre.replaceAll("MA.", "");
+        Nombre = Nombre.replaceAll("J", "");
+        Nombre = Nombre.replaceAll(" ", "");
+        String NN = Nombre;        
+        Nombre = Character.toString(Nombre.charAt(0));
+
+        
+        String Año = ((cbAño.getSelectedItem()).toString());
+        Año = Año.substring(2,4);
+        
+        String Mes = ((cbMes.getSelectedItem()).toString());
+        String Dia = ((cbDia.getSelectedItem()).toString());
+        String Estado = cbEstados.getSelectedItem().toString();
+        switch(Estado){
+            case "Aguascalientes":
+                Estado = "AS";
+                break;
+            case "Baja California":
+                Estado = "BC";
+                break;
+            case "Baja California Sur":
+                Estado = "BS";
+                break;
+            case "Campeche":
+                Estado = "CC";
+                break;
+            case "Chiapas":
+                Estado = "CS";
+                break; 
+            case "Chihuahua":
+                Estado = "CH";
+                break;
+            case "Coahuila":
+                Estado = "CL";
+                break;
+            case "Colima":
+                Estado = "CM";
+                break;
+            case "Ciudad de México":
+                Estado = "DF";
+                break;
+            case "Durango":
+                Estado = "DG";
+                break;
+            case "Guanajuato":
+                Estado = "GT";
+                break;
+            case "Guerrero":
+                Estado = "GR";
+                break;
+            case "Hidalgo":
+                Estado = "HG";
+                break;
+            case "Jalisco":
+                Estado = "JC";
+                break;
+            case "Edo. de México":
+                Estado = "MC";
+                break;
+            case "Michoacán":
+                Estado = "MN";
+                break;
+            case "Morelos":
+                Estado = "MS";
+                break;
+            case "Nayarit":
+                Estado = "NT";
+                break;
+            case "Nuevo León":
+                Estado = "ML";
+                break;
+            case "Oaxaca":
+                Estado = "OC";
+                break;    
+            case "Puebla":
+                Estado = "PL";
+                break;
+            case "Querétaro":
+                Estado = "QO";
+                break;
+            case "Quintana Roo":
+                Estado = "QR";
+                break;
+            case "San Luis Potosí":
+                Estado = "SP";
+                break;
+            case "Sinaloa":
+                Estado = "SL";
+                break;
+            case "Sonora":
+                Estado = "SR";
+                break;
+            case "Tabasco":
+                Estado = "TC";
+                break;
+            case "Tamaulipas":
+                Estado = "TS";
+                break;
+            case "Tlaxcala":
+                Estado = "TL";
+                break;
+            case "Veracruz":
+                Estado = "VZ";
+                break;
+            case "Yucatan":
+                Estado = "YN";
+                break;
+            case "Zacatecas":
+                Estado = "ZS";
+                break;
+            default:
+                System.out.println("Error inesperado");
+                
+        }
+        
+        String Sexo= new String();
+        if (rbHombre.isSelected()) {
+             Sexo = "H";
+        }
+        else{
+             Sexo = "M";
+        }
+        
+        String AP = this.tfFirst.getText().toUpperCase();
+        AP = AP.substring(1, AP.length());
+        
+        String AM = this.tfSecond.getText().toUpperCase();
+        AM = AM.substring(1, AM.length());
+        
+        String N = this.tfName.getText().toUpperCase();
+        N = N.substring(1, N.length());
+        
+        AP = AP.replaceAll("A", "");
+        AP = AP.replaceAll("E", "");
+        AP = AP.replaceAll("I", "");
+        AP = AP.replaceAll("O", "");
+        AP = AP.replaceAll("U", "");
+        AP = Character.toString(AP.charAt(0));
+        
+        AM = AM.replaceAll("A", "");
+        AM = AM.replaceAll("E", "");
+        AM = AM.replaceAll("I", "");
+        AM = AM.replaceAll("O", "");
+        AM = AM.replaceAll("U", "");
+        AM = Character.toString(AM.charAt(0));
+        
+        NN = NN.replaceAll("A", "");
+        NN = NN.replaceAll("E", "");
+        NN = NN.replaceAll("I", "");
+        NN = NN.replaceAll("O", "");
+        NN = NN.replaceAll("U", "");
+        NN = Character.toString(NN.charAt(0));
+        
+        
+        String CURP = (ApellidoPaterno+ ApellidoPaterno1 + ApellidoMaterno + 
+                Nombre + Año + Mes + Dia + Sexo + Estado + 
+                AP + AM + NN);
+        CURP =CURP.toUpperCase();
+        CURP = Normalizer.normalize(CURP, Normalizer.Form.NFD);
+        return CURP;
+    }
+    /**
+     * Creates new form MainWindow
+     */
+    public char DeleteConsonants(String s){
+        s = s.toUpperCase();
+        char vowel = ' ';
+        for (int i = 0; i < s.length(); i++) {
+            vowel = s.charAt(i);
+            if (vowel == 'A'|| vowel == 'E'|| vowel == 'I'|| vowel == 'O'|| vowel == 'U') {
+                i = s.length() + 1;
+            }
+        }
+        return vowel;
+    }
+        
+    public char DeleteVowels(String s){
+        s = s.toUpperCase();
+        char Consonant = ' ';
+        for (int i = 0; i < s.length(); i++) {
+            Consonant = s.charAt(i);
+            if (Consonant != 'A'|| Consonant != 'E'|| Consonant != 'I'|| Consonant != 'O'|| Consonant != 'U') {
+                i = s.length() + 1;
+            }
+        }
+        return Consonant;
+    }
+    
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
         String name = tfName.getText();
-        String lastName = tfLastName.getText();
+        String lastName = tfFirst.getText();
+        String estado = cbEstados.getSelectedItem().toString();
+        String fecha = cbDia.getSelectedItem().toString() + '/' + cbMes.getSelectedItem().toString() + 
+                '/' + cbAño.getSelectedItem().toString();
+        String Sexo= new String();
+        if (rbHombre.isSelected()) 
+        {
+             Sexo = "Hombre";
+             rbMujer.setSelected(false);
+        }
+        else
+        {
+             Sexo = "Mujer";
+             rbHombre.setSelected(false);
+        }
+        String id = Curpize();
+        
+        
         if(!name.isEmpty() || !lastName.isEmpty())
         {
-            Student student = new Student(name, lastName);
+            Student student = new Student(id, name, lastName, estado, fecha, Sexo);
             studentBLO.save(student);
             tfName.setText("");
-            tfLastName.setText("");
+            tfFirst.setText("");
+            tfSecond.setText("");
+            cbEstados.setSelectedIndex(0);
+            cbAño.setSelectedIndex(0);
+            cbMes.setSelectedIndex(0);
+            cbDia.setSelectedIndex(0);
         }
+        
+        
     }//GEN-LAST:event_bSaveActionPerformed
 
     private void bSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchActionPerformed
@@ -165,7 +591,7 @@ public class StudentWindow extends javax.swing.JFrame {
 //            tfName.setText(student.getName());
 //            tfLastName.setText(student.getLastName());
 //        }
-        String lastName = tfLastName.getText().trim();
+        String lastName = tfFirst.getText().trim();
         if(!lastName.isEmpty())
         {
             List<Student> studentList = studentBLO.findByLastName(lastName);
@@ -192,6 +618,9 @@ public class StudentWindow extends javax.swing.JFrame {
             dtm.setValueAt(studentList.get(i).getId(), i, 0); //Valor a insertar, , columna
             dtm.setValueAt(studentList.get(i).getName(), i, 1);
             dtm.setValueAt(studentList.get(i).getLastName(), i, 2);
+            dtm.setValueAt(studentList.get(i).getEstado(), i, 3);
+            dtm.setValueAt(studentList.get(i).getFecha(), i, 4);
+            dtm.setValueAt(studentList.get(i).getSexo(), i, 5);
         }
     }
     
@@ -218,22 +647,153 @@ public class StudentWindow extends javax.swing.JFrame {
         studentBLO.delete(studentBLO.find(id));
     }//GEN-LAST:event_bDeleteActionPerformed
 
+    private void rbMujerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMujerActionPerformed
+        // TODO add your handling code here:
+        if(rbMujer.isSelected())
+            rbHombre.setSelected(false);
+    }//GEN-LAST:event_rbMujerActionPerformed
+
+    private void rbHombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbHombreActionPerformed
+        // TODO add your handling code here:
+        if(rbHombre.isSelected())
+            rbMujer.setSelected(false);
+    }//GEN-LAST:event_rbHombreActionPerformed
+
+    private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            Student update = new Student();
+            update.setName(tfName.getText());
+            update.setLastName(tfFirst.getText() + " " + tfSecond.getText());
+            update.setEstado(cbEstados.getSelectedItem().toString());
+            update.setFecha(cbDia.getSelectedItem().toString() + "/" + cbMes.getSelectedItem().toString() + "/"
+             + cbAño.getSelectedItem().toString());
+            update.setId(tfId.getText());
+            if(rbHombre.isSelected())
+                update.setSexo("Hombre");
+            else
+                update.setSexo("Mujer");
+            studentBLO.update(update, Curpize());
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Please, fill all the fields.");
+        }
+    }//GEN-LAST:event_bUpdateActionPerformed
+
+    private void bRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRegisterActionPerformed
+        // TODO add your handling code here:
+        Relacion r = new Relacion();
+        r.setId(tfID.getText());
+        r.setMateria(cbMateria.getSelectedItem().toString());
+        int pos = 9;
+        if(cbMateria.getSelectedItem().toString().equals("Matemáticas"))
+            pos=0;
+        else if(cbMateria.getSelectedItem().toString().equals("Computación"))
+            pos=1;
+        else
+            pos=2;
+        r.setDocente(LM.get(pos).getDocente());
+        boolean b = true;
+        for (Relacion re : LR)
+        {
+            if(re.getMateria().equals(cbMateria.getSelectedItem().toString()) && re.getDocente().equals(r.getId()))
+                b = false;
+        }
+        if (b==true)
+            LR.add(r);
+    }//GEN-LAST:event_bRegisterActionPerformed
+
+    private void bDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDropActionPerformed
+        // TODO add your handling code here:
+        Relacion r = new Relacion();
+        r.setId(tfID.getText());
+        r.setMateria(cbMateria.getSelectedItem().toString());
+        int pos = 9;
+        if(cbMateria.getSelectedItem().toString().equals("Matemáticas"))
+            pos = 0;
+        else if (cbMateria.getSelectedItem().toString().equals("Computación"))
+            pos=1;
+        else
+            pos=2;
+        r.setDocente(LM.get(pos).getDocente());
+        for (Relacion re: LR)
+        {
+            if(re.getMateria().equals(cbMateria.getSelectedItem().toString()) && re.getId().equals(r.getId()))
+            {
+                LR.remove(re);
+                break;
+            }
+        }
+    }//GEN-LAST:event_bDropActionPerformed
+
+    public void clear2()
+    {
+        DefaultTableModel dtm = (DefaultTableModel)tMateria.getModel();
+        while(dtm.getRowCount()>0)
+        {
+            dtm.removeRow(0);
+        }
+    }
+    
+    private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
+        // TODO add your handling code here:
+        clear2();
+        DefaultTableModel dtm = (DefaultTableModel)tMateria.getModel();
+        Object[] emptyRow={""};
+        for(int i=0;i<LR.size();i++)
+        {
+            dtm.addRow(emptyRow);
+            dtm.setValueAt(LR.get(i).getId(), i, 0);
+            dtm.setValueAt(LR.get(i).getMateria(), i, 1);
+            dtm.setValueAt(LR.get(i).getDocente(), i, 2);
+        }
+    }//GEN-LAST:event_RefreshActionPerformed
+
+    private void bRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRegresarActionPerformed
+        // TODO add your handling code here:
+        MainWindow mw = new MainWindow();
+        mw.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_bRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Refresh;
     private javax.swing.JButton bDelete;
+    private javax.swing.JButton bDrop;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bRefresh;
+    private javax.swing.JButton bRegister;
+    private javax.swing.JButton bRegresar;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSearch;
     private javax.swing.JButton bUpdate;
+    private javax.swing.JComboBox<String> cbAño;
+    private javax.swing.JComboBox<String> cbDia;
+    private javax.swing.JComboBox<String> cbEstados;
+    private javax.swing.JComboBox<String> cbMateria;
+    private javax.swing.JComboBox<String> cbMes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JRadioButton rbHombre;
+    private javax.swing.JRadioButton rbMujer;
+    private javax.swing.JTable tMateria;
     private javax.swing.JTable tStudents;
+    private javax.swing.JTextField tfFirst;
+    private javax.swing.JTextField tfID;
     private javax.swing.JTextField tfId;
-    private javax.swing.JTextField tfLastName;
     private javax.swing.JTextField tfName;
+    private javax.swing.JTextField tfSecond;
     // End of variables declaration//GEN-END:variables
 }

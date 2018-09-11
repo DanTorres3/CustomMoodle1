@@ -7,6 +7,7 @@ package edu.salle.custommoodle;
 
 import edu.salle.custommoodle.businesslogic.StudentBLO;
 import edu.salle.custommoodle.model.Student;
+import edu.salle.custommoodle.view.MainWindow;
 import edu.salle.custommoodle.view.StudentWindow;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class App {
 //        }
 //        
 //        
-        StudentWindow window = new StudentWindow();
+        MainWindow window = new MainWindow();
         window.setVisible(true);
     }
     

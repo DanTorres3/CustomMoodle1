@@ -15,14 +15,21 @@ public class Student{
     private String name;
     private String lastName;
     private String id;
+    private String estado;
+    private String fecha;
+    private String sexo;
     
     public Student(){
         
     }
 
-    public Student(String name, String lastName) {
+    public Student(String id, String name, String lastName, String estado, String fecha, String sexo) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
+        this.estado = estado;
+        this.fecha = fecha;
+        this.sexo = sexo;
     }
     
     
@@ -49,6 +56,30 @@ public class Student{
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+        public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
     
     @Override

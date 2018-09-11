@@ -41,7 +41,7 @@ public class StudentDAOMySQL implements StudentDAO{
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Student student, String CURP) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

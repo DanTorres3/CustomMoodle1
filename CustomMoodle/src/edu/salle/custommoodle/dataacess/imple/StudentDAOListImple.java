@@ -26,8 +26,6 @@ public class StudentDAOListImple implements StudentDAO{
     
     @Override
     public Student save(Student student) {
-        String id = Integer.toString(studentList.size()+1);
-        student.setId(id);
         studentList.add(student);
         return student;
     }
@@ -67,8 +65,9 @@ public class StudentDAOListImple implements StudentDAO{
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Student student, String CURP) {
         int pos = studentList.indexOf(student);
+        student.setId(CURP);
         studentList.set(pos, student);
     }
 
